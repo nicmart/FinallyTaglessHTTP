@@ -1,9 +1,10 @@
-package algebra
+package interpreter
 
+import algebra.{CommunicationAlgebra, ConsoleAlgebra, InfoAlgebra}
 import cats.Monad
 import cats.syntax.all._
 
-class ConsoleCommunicatonInterpreter[F[_]: Monad, Socket, Req, Resp](
+class ConsoleCommunicationInterpreter[F[_]: Monad, Socket, Req, Resp](
   communication: CommunicationAlgebra[F, Socket, Req, Resp],
   info: InfoAlgebra[Req, Resp, Socket],
   console: ConsoleAlgebra[F]

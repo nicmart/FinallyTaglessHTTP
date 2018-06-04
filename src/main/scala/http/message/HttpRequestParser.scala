@@ -2,8 +2,6 @@ package http.message
 
 import java.io.BufferedReader
 
-import http.protocol.MalformedHttpRequest
-
 class HttpRequestParser(bufferedReader: BufferedReader) {
   def parseRequest(): Either[Throwable, HttpRequest] =
     for {
@@ -24,7 +22,7 @@ class HttpRequestParser(bufferedReader: BufferedReader) {
     parseNonEmptyLine().flatMap { line =>
       line.split(" ").toList match {
         case method :: url :: _ => Right((method, url))
-        case _ => Left(new MalformedHttpRequest("Failed to parse request line"))
+        case _                  => Left(new MalformedHttpRequest("Failed to parse request line"))
       }
     }
 
@@ -33,3 +31,5 @@ class HttpRequestParser(bufferedReader: BufferedReader) {
     Either.cond(line != null, line, new MalformedHttpRequest("Non-empty line required"))
   }
 }
+
+class MalformedHttpRequest(str: String) extends RuntimeException

@@ -1,5 +1,7 @@
 package algebra
 
+import cats.Monad
+
 trait ConnectionAlgebra[F[_], Socket] {
   def acceptConnection: F[Socket]
   def shutDown: F[Unit]
@@ -27,8 +29,11 @@ trait InfoAlgebra[Req, Resp, Socket] {
 }
 
 trait ServerAlgebra[F[_], Req, Resp, Socket] {
+  val monad: Monad[F]
   val connection: ConnectionAlgebra[F, Socket]
   val communication: CommunicationAlgebra[F, Socket, Req, Resp]
   val router: RouterAlgebra[F, Req, Resp]
-  val console: ConsoleAlgebra[F]
+  object Instances {
+    implicit val monadInstance: Monad[F] = monad
+  }
 }

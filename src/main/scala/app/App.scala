@@ -1,8 +1,8 @@
 package app
 
-import app.wiring.Wiring
+import app.wiring.Wiring._
 
 object App extends scala.App {
-  //Wiring.echoServer.run.unsafeRunSync()
-  Wiring.interpretedServer.unsafeRunSync()
+  //httpServerModule.runProgram(httpServer)
+  echoServerModule.runProgram(echoServer)
 }
