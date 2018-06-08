@@ -28,12 +28,17 @@ trait InfoAlgebra[Req, Resp, Socket] {
   def socketInfo(socket: Socket): String
 }
 
-trait ServerAlgebra[F[_], Req, Resp, Socket] {
+trait IOAlgebra[F[_]] {
   val monad: Monad[F]
+  def inBackground(fa: F[Unit]): F[Unit]
+}
+
+trait ServerAlgebra[F[_], Req, Resp, Socket] {
+  val ioAlgebra: IOAlgebra[F]
   val connection: ConnectionAlgebra[F, Socket]
   val communication: CommunicationAlgebra[F, Socket, Req, Resp]
   val router: RouterAlgebra[F, Req, Resp]
   object Instances {
-    implicit val monadInstance: Monad[F] = monad
+    implicit val monadInstance: Monad[F] = ioAlgebra.monad
   }
 }

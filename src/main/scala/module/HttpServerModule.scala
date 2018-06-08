@@ -16,7 +16,7 @@ final class HttpServerModule(serverSocket: ServerSocket, api: HttpRequest => IO[
 
   override def interpreter: ServerAlgebra[IO, HttpRequest, HttpResponse, java.net.Socket] =
     new ServerAlgebra[IO, HttpRequest, HttpResponse, java.net.Socket] {
-      override val monad: Monad[IO] = Monad[IO]
+      override val ioAlgebra: IOAlgebra[IO] = new CatsIOInterpreter
       override val connection: ConnectionAlgebra[IO, Socket] = new JavaConnectionInterpreter(serverSocket)
       override val communication: CommunicationAlgebra[IO, Socket, HttpRequest, HttpResponse] =
         new ConsoleCommunicationInterpreter(
